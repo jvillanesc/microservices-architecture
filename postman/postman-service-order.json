@@ -1,0 +1,94 @@
+{
+  "info": {
+    "name": "Servicio de Órdenes",
+    "_postman_id": "b1e2c3d4-5678-1234-9abc-def012345678",
+    "description": "API para gestionar órdenes en un sistema de comercio.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Listar todas las órdenes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/services-order/orders",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["services-order", "orders"]
+        }
+      }
+    },
+    {
+      "name": "Registrar una nueva orden",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codeProduct\": \"CD-001\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/services-order/orders",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["services-order", "orders"]
+        }
+      }
+    },
+    {
+      "name": "Obtener una orden específica",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/services-order/orders/12345",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["services-order", "orders", "12345"]
+        }
+      }
+    },
+    {
+      "name": "Actualizar una orden",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/services-order/orders/12345",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["services-order", "orders", "12345"]
+        }
+      }
+    }
+  ]
+}

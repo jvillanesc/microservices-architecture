@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: Microservices Inventory
+
+server:
+  port: 8080
