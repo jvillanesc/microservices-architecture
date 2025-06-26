@@ -1,0 +1,46 @@
+@startuml
+package com.codearqui.serviceinventory.api {
+    interface InventoryApi {
+        +getInventory(productId, exchange): Mono<InventoryResponse>
+        +listInventory(exchange): Flux<InventoryResponse>
+        +registerInventory(inventoryRequest, exchange): Mono<InventoryResponse>
+        +updateInventory(productId, orderInvRequest, exchange): Mono<Void>
+    }
+
+    interface InventoryApiDelegate {
+        +getInventory(productId, exchange): Mono<InventoryResponse>
+        +listInventory(exchange): Flux<InventoryResponse>
+        +registerInventory(inventoryRequest, exchange): Mono<InventoryResponse>
+        +updateInventory(productId, orderInvRequest, exchange): Mono<Void>
+    }
+
+    class InventoryApiController {
+        -delegate: InventoryApiDelegate
+    }
+
+    class InventoryApiImpl {
+        -inventoryService: InventoryService
+    }
+}
+
+package com.codearqui.serviceinventory.service {
+    class InventoryServiceImpl {
+        +createOrder(inventory): Mono<InventoryResponse>
+        +getInventory(code): Mono<InventoryResponse>
+        +getList(): Flux<InventoryResponse>
+    }
+
+    interface InventoryService {
+        +createOrder(inventory): Mono<InventoryResponse>
+        +getInventory(code): Mono<InventoryResponse>
+        +getList(): Flux<InventoryResponse>
+    }
+}
+
+InventoryApi <|.. InventoryApiController : implements
+InventoryApiController --> InventoryApiDelegate : delegates
+InventoryApiImpl ..|> InventoryApiDelegate : implements
+InventoryApiImpl --> InventoryService : uses
+InventoryServiceImpl ..|> InventoryService : implements
+
+@enduml

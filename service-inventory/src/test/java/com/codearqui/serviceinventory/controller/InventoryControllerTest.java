@@ -14,36 +14,35 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @WebFluxTest(InventoryApiController.class)
 @ExtendWith(MockitoExtension.class)
-public class InventoryControllerTest {
+class InventoryControllerTest {
     @Autowired
     private WebTestClient webTestClient;
     @MockitoBean
-    private InventoryApiImpl inventoryApi;
-    @Autowired
     private InventoryApiImpl inventoryApiImpl;
 
     @Test
-    @DisplayName("Get inventory when product exists then return 200")
+    @DisplayName("get list inventory when product exists then return 200")
     void getListInventoryWhenProductExistsThenReturn200() {
-
-        //Arrange
+        // Arrange
         var inventory = new InventoryResponse();
-        inventory.setIdProduct("12345");
+        inventory.setIdProduct("1");
 
         when(inventoryApiImpl.listInventory(any()))
-                .thenReturn(Flux.just(inventory, inventory));
+                .thenReturn(Flux.just(inventory));
 
+        // Act
         webTestClient.get()
                 .uri("/services-inventory/inventories")
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType("application/json")
                 .expectBodyList(InventoryResponse.class)
-                .hasSize(2);
-    }
+                .contains(inventory);
 
+        // Assert
+        verify(inventoryApiImpl, times(1)).listInventory(any());
+    }
 }
