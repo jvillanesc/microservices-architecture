@@ -1,0 +1,69 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/orderdb
+    username: postgres
+    password: 123456789
+    pool:
+      initial-size: 5
+      max-size: 20
+      max-idle-time: 30m
+      validation-query: SELECT 1
+  
+  liquibase:
+    change-log: classpath:db/changelog/master.yaml
+    url: jdbc:postgresql://localhost:5432/orderdb
+    user: postgres
+    password: 123456789
+    drop-first: false
+
+logging:
+  level:
+    io.r2dbc.postgresql.QUERY: DEBUG
+    io.r2dbc.postgresql.PARAM: DEBUG
+    org.springframework.r2dbc: DEBUG
+
+client-micro:
+  micro-inventory:
+    base-url: "http://localhost:8080/services-inventory"
+
+resilience4j:
+  #1
+  retry:
+    configs:
+      default:
+        maxAttempts: 4 # Número máximo de intentos
+        waitDuration: 3s # Duración de espera entre intentos
+    instances:
+      microInventory:
+        baseConfig: default
+  #2
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 5 # Tamaño de la ventana deslizante
+        failureRateThreshold: 50 # Umbral de tasa de fallos
+        permittedNumberOfCallsInHalfOpenState: 3 # Número de llamadas permitidas en estado medio abierto
+        waitDurationInOpenState: 10s
+        registerHealthIndicator: true # Registrar el indicador de salud
+    instances:
+      microInventory:
+        baseConfig: default
+  #3
+  ratelimiter:
+    configs:
+      default:
+        limitForPeriod: 10 # Límite de llamadas por período
+        limitRefreshPeriod: 60s # Período de refresco del límite
+        timeoutDuration: 3s # Duración del timeout para la solicitud
+        registerHealthIndicator: true # Registrar el indicador de salud
+    instances:
+      microInventory:
+        baseConfig: default
+  #4
+  timelimiter:
+    instances:
+      microInventory:
+        timeoutDuration: 1s # Duración del timeout
+        cancelRunningFuture: true # Cancelar la tarea en ejecución si se alcanza el timeout
+
+

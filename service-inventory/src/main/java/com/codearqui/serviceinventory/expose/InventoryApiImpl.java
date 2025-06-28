@@ -31,7 +31,7 @@ public class InventoryApiImpl implements InventoryApiDelegate {
     @Override
     public Flux<InventoryResponse> listInventory(ServerWebExchange exchange) {
         return inventoryService.getList()
-                .delayElements(java.time.Duration.ofSeconds(3))
+                //.delayElements(java.time.Duration.ofSeconds(3))
                 .doOnSubscribe(a -> log.warn("LIst Inventory"))
                 .doOnComplete(() -> log.warn("List Inventory Complete"))
                 .doOnError(e -> log.error("Error List Inventory", e));

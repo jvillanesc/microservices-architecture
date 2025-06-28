@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: Microservice Order
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      base-path: '/services-order/actuator'
+      exposure:
+        include: '*'
